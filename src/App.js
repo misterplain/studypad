@@ -1,23 +1,20 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import SectionTitle from "./components/SectionTitle";
+import AccordionList from "./components/AccordionList";
+import guide from "./data/guide";
+import dsa from "./data/dsa";
+import interview from "./data/interview";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App container py-3">
+      <SectionTitle
+        title="StudyPad Reference"
+        subtitle="Code + Notes, organized by sections"
+      />
+      <AccordionList items={[guide]} defaultActiveKey={"0"} />
+      <AccordionList items={[dsa]} defaultActiveKey={"0"} />
+      <AccordionList items={[interview]} defaultActiveKey={"0"} />
     </div>
   );
 }

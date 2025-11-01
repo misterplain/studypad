@@ -1,8 +1,9 @@
-import { render, screen } from '@testing-library/react';
-import App from './App';
+import { render, screen } from "@testing-library/react";
+import App from "./App";
 
-test('renders learn react link', () => {
+test("renders accordion headings", () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/JavaScript Basics/i)).toBeInTheDocument();
+  expect(screen.getByText(/HTML Snippet/i)).toBeInTheDocument();
+  expect(screen.getByText(/Terminal Commands/i)).toBeInTheDocument();
 });

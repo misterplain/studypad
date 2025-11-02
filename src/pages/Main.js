@@ -33,7 +33,7 @@ function Main() {
   };
 
   return (
-    <div className="container py-3">
+    <div className="main-content py-3">
       <SectionTitle
         title="StudyPad Reference"
         subtitle="Code + Notes, organized by sections"

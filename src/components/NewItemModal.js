@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 
 function NewItemModal({ show, onHide, onSubmit, loading, error, parentTitle }) {
@@ -8,7 +8,18 @@ function NewItemModal({ show, onHide, onSubmit, loading, error, parentTitle }) {
   const [linkLabel, setLinkLabel] = useState("");
   const [linkEnabled, setLinkEnabled] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Reset form when modal opens
+  useEffect(() => {
+    if (show) {
+      setTitle("");
+      setContent("");
+      setLinkUrl("");
+      setLinkLabel("");
+      setLinkEnabled(false);
+    }
+  }, [show]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (title.trim()) {
       const payload = {
@@ -21,7 +32,13 @@ function NewItemModal({ show, onHide, onSubmit, loading, error, parentTitle }) {
           label: linkLabel.trim() || undefined,
         };
       }
-      onSubmit(payload);
+      await onSubmit(payload);
+      // Reset form after successful submit
+      setTitle("");
+      setContent("");
+      setLinkUrl("");
+      setLinkLabel("");
+      setLinkEnabled(false);
     }
   };
 
@@ -101,25 +118,6 @@ function NewItemModal({ show, onHide, onSubmit, loading, error, parentTitle }) {
               </Form.Group>
             </>
           )}
-          <Form.Group className="mb-2">
-            <Form.Label>Link URL (optional)</Form.Label>
-            <Form.Control
-              type="url"
-              placeholder="https://example.com"
-              value={linkUrl}
-              onChange={(e) => setLinkUrl(e.target.value)}
-              inputMode="url"
-            />
-          </Form.Group>
-          <Form.Group>
-            <Form.Label>Link Label (optional)</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Open link"
-              value={linkLabel}
-              onChange={(e) => setLinkLabel(e.target.value)}
-            />
-          </Form.Group>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose} disabled={loading}>

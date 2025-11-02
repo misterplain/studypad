@@ -44,6 +44,7 @@ function Login({ onToggle }) {
             placeholder="Enter email"
             value={formData.email}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
         </Form.Group>
@@ -56,6 +57,7 @@ function Login({ onToggle }) {
             placeholder="Password"
             value={formData.password}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
         </Form.Group>

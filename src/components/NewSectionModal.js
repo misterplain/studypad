@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Modal, Button, Form, Alert } from "react-bootstrap";
 
 function NewSectionModal({ show, onHide, onSubmit, loading, error }) {
@@ -7,7 +7,17 @@ function NewSectionModal({ show, onHide, onSubmit, loading, error }) {
   const [linkLabel, setLinkLabel] = useState("");
   const [linkEnabled, setLinkEnabled] = useState(false);
 
-  const handleSubmit = (e) => {
+  // Reset form when modal opens
+  useEffect(() => {
+    if (show) {
+      setTitle("");
+      setLinkUrl("");
+      setLinkLabel("");
+      setLinkEnabled(false);
+    }
+  }, [show]);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (title.trim()) {
       const payload = { title: title.trim(), parentId: null };
@@ -17,7 +27,12 @@ function NewSectionModal({ show, onHide, onSubmit, loading, error }) {
           label: linkLabel.trim() || undefined,
         };
       }
-      onSubmit(payload);
+      await onSubmit(payload);
+      // Reset form after successful submit
+      setTitle("");
+      setLinkUrl("");
+      setLinkLabel("");
+      setLinkEnabled(false);
     }
   };
 

@@ -69,6 +69,7 @@ function Register({ onToggle }) {
             placeholder="Enter your name"
             value={formData.name}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
         </Form.Group>
@@ -81,6 +82,7 @@ function Register({ onToggle }) {
             placeholder="Enter email"
             value={formData.email}
             onChange={handleChange}
+            autoComplete="off"
             required
           />
         </Form.Group>
@@ -93,6 +95,7 @@ function Register({ onToggle }) {
             placeholder="Password (min 6 characters)"
             value={formData.password}
             onChange={handleChange}
+            autoComplete="new-password"
             required
           />
         </Form.Group>
@@ -105,6 +108,7 @@ function Register({ onToggle }) {
             placeholder="Confirm password"
             value={formData.confirmPassword}
             onChange={handleChange}
+            autoComplete="new-password"
             required
           />
         </Form.Group>

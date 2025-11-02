@@ -31,27 +31,32 @@ function normalizeLang(lang) {
 
 const HighlightedCodeBlock = ({ language, code }) => {
   const codeRef = useRef(null);
+  const langClass = normalizeLang(language);
 
   useEffect(() => {
     const el = codeRef.current;
     if (!el) return;
+
+    // Set text content safely to avoid XSS
+    el.textContent = code;
+
+    // Remove any previous highlighting classes to prevent re-highlight warnings
+    el.removeAttribute("data-highlighted");
+    el.className = langClass ? `language-${langClass}` : "";
+
     try {
       hljs.highlightElement(el);
     } catch (_) {
       // ignore if language not registered
     }
-  }, [language, code]);
-
-  const langClass = normalizeLang(language);
+  }, [language, code, langClass]);
 
   return (
     <pre className="mb-3">
       <code
         ref={codeRef}
         className={langClass ? `language-${langClass}` : undefined}
-      >
-        {code}
-      </code>
+      />
     </pre>
   );
 };

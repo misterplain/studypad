@@ -5,6 +5,7 @@ import {
   updateNote,
   deleteNote,
   reorderNotes,
+  togglePin,
 } from "./noteActions";
 
 const initialState = {
@@ -159,6 +160,19 @@ const noteSlice = createSlice({
         state.notes = action.payload;
       })
       .addCase(reorderNotes.rejected, (state, action) => {
+        state.actionLoading = false;
+        state.actionError = action.payload;
+      })
+      // Toggle pin
+      .addCase(togglePin.pending, (state) => {
+        state.actionLoading = true;
+        state.actionError = null;
+      })
+      .addCase(togglePin.fulfilled, (state, action) => {
+        state.actionLoading = false;
+        state.notes = action.payload;
+      })
+      .addCase(togglePin.rejected, (state, action) => {
         state.actionLoading = false;
         state.actionError = action.payload;
       });

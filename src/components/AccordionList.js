@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // Removed unused Button/ButtonGroup and switched to Bootstrap icons to avoid FA import mismatches
 import { Button, ButtonGroup } from "react-bootstrap";
-import { BsPlus, BsPencil, BsTrash } from "react-icons/bs";
+import { BsPlus, BsPencil, BsTrash, BsPin, BsPinFill } from "react-icons/bs";
 import Accordion from "react-bootstrap/Accordion";
 import HighlightedCodeBlock from "./HighlightedCodeBlock";
 import NewItemModal from "./NewItemModal";
@@ -18,7 +18,12 @@ import { parseMixedContent } from "../utils/contentParser";
 // import EditNoteModal from "./EditNoteModal";
 // import WarningModal from "./WarningModal";
 // import { parseMixedContent } from "../utils/contentParser";
-import { createNote, updateNote, deleteNote } from "../store/noteActions";
+import {
+  createNote,
+  updateNote,
+  deleteNote,
+  togglePin,
+} from "../store/noteActions";
 import { clearNoteError } from "../store/noteSlice";
 
 function renderText(text) {
@@ -109,6 +114,11 @@ function AccordionList({ items, defaultActiveKey, parentId = null }) {
       children: sortTree(n.children || []),
     }));
     copy.sort((a, b) => {
+      // Sort pinned items first
+      const pa = a.isPinned ?? false;
+      const pb = b.isPinned ?? false;
+      if (pa !== pb) return pb - pa; // pinned first
+      // Then by urgency
       const ua = computeUrgency(a);
       const ub = computeUrgency(b);
       if (ub !== ua) return ub - ua; // 3 -> 1
@@ -173,6 +183,12 @@ function AccordionList({ items, defaultActiveKey, parentId = null }) {
     }
   };
 
+  const handlePinClick = async (item) => {
+    const itemId = item._id || item.id;
+    const isPinned = !(item.isPinned ?? false);
+    await dispatch(togglePin({ id: itemId, isPinned }));
+  };
+
   return (
     <>
       <Accordion defaultActiveKey={defaultActiveKey} alwaysOpen>
@@ -204,6 +220,20 @@ function AccordionList({ items, defaultActiveKey, parentId = null }) {
                     <span>{item.title}</span>
                   </span>
                   <div className="d-flex align-items-center gap-3">
+                    <span
+                      role="button"
+                      tabIndex={0}
+                      className={item.isPinned ? "text-dark" : "text-secondary"}
+                      style={{ opacity: item.isPinned ? 1 : 0.4 }}
+                      title={item.isPinned ? "Unpin item" : "Pin item"}
+                      onClick={(e) => stop(e, () => handlePinClick(item))}
+                      onKeyDown={(e) =>
+                        keyActivate(e, () => handlePinClick(item))
+                      }
+                      aria-label={item.isPinned ? "Unpin item" : "Pin item"}
+                    >
+                      {item.isPinned ? <BsPinFill /> : <BsPin />}
+                    </span>
                     <span
                       role="button"
                       tabIndex={0}

@@ -126,3 +126,21 @@ export const reorderNotes = createAsyncThunk(
     }
   }
 );
+
+// Toggle pin status
+export const togglePin = createAsyncThunk(
+  "notes/togglePin",
+  async ({ id, isPinned }, thunkAPI) => {
+    try {
+      const response = await requestWithRefresh(
+        (headers) => axios.put(`${API_URL}/notes/${id}`, { isPinned }, headers),
+        thunkAPI
+      );
+      return response.data;
+    } catch (error) {
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || "Failed to toggle pin"
+      );
+    }
+  }
+);
